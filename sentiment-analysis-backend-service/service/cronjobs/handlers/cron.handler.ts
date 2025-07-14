@@ -1,13 +1,16 @@
 import { UnknownAny } from "../../types/types";
-import RequestHelper from "../../requests/request.helper";
 import { apiUrl } from "../../constant/api.constant";
+import RequestHelper from "../../requests/request.helper";
+import KafkaPublisher from "../../kafka/publisher/publisher.kafka";
 
 class CronHandler {
   public requestHelper: RequestHelper;
+  public kafkaPublisher: KafkaPublisher;
   public apiHashMap: Record<string, Record<string, any>> = {};
 
   constructor() {
     this.requestHelper = new RequestHelper(apiUrl);
+    this.kafkaPublisher = new KafkaPublisher();
     this.apiHashMap = {
       [`${apiUrl}`]: {},
     };
@@ -28,7 +31,7 @@ class CronHandler {
         }
       }
       const payload = JSON.parse(JSON.stringify(this.apiHashMap));
-      console.log(payload);
+      await this.kafkaPublisher.publishMessageToSentimentTopic(payload);
     } catch (err: UnknownAny) {
       throw new Error(err);
     }
