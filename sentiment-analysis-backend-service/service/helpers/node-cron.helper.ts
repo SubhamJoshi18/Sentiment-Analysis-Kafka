@@ -1,10 +1,10 @@
 import cron from "node-cron";
-import { CRON_TIME } from "../constant/cron.constant";
+import { CRON_TIME, EVERY_5_SECOND } from "../constant/cron.constant";
 import cronJobsCallback from "../cronjobs/cron.callback";
 import getEnvValue from "../utils/env.utils";
 
 class CronHelper {
-  public defaultTime: string = CRON_TIME;
+  public defaultTime: string = EVERY_5_SECOND;
 
   constructor() {}
 
