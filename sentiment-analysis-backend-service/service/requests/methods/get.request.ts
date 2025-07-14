@@ -1,6 +1,7 @@
 import axios from "axios";
 import { UnknownAny } from "../../types/types";
 import sentimentLogger from "../../logger/logger";
+import { apiKey } from "../../constant/api.constant";
 
 class GETMethodHelper {
   public cacheRequest: Map<string, Record<string, string>> = new Map();
@@ -24,8 +25,11 @@ class GETMethodHelper {
         for (const [key, value] of Object.entries(
           this.cacheRequest.get(apiUrl) as object
         )) {
-          baseUrl += `${key}=${value}`;
+          baseUrl += `${key}=${value}&`;
         }
+        baseUrl = baseUrl.endsWith("&")
+          ? baseUrl.slice(0, -1).concat(`&apiKey=${apiKey}`)
+          : baseUrl;
         const apiResponse = await axios.get(baseUrl, { headers: headers });
         return apiResponse;
       } catch (err: UnknownAny) {

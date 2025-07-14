@@ -1,6 +1,7 @@
 import sentimentLogger from "../logger/logger";
 import { UnknownAny } from "../types/types";
 import { defaultArray } from "../utils/common.utils";
+import getCronInstance from "./handlers/cron.handler";
 
 const errorTrace: any[] = [];
 
@@ -10,7 +11,10 @@ async function cronJobsCallback() {
     `Starting the Sentiment Analysis at the : ${new Date().toDateString()}`
   );
   try {
-    
+    const cronHandlerInstances = getCronInstance();
+    sentimentLogger.info(`Starting the Process....`);
+    await cronHandlerInstances.evaluateTheProcess();
+    sentimentLogger.info(`Process Has been Completed`);
   } catch (err: UnknownAny) {
     sentimentLogger.error(
       `Error on the Cron Job Callback, Due To ${err.message}`
