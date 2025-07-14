@@ -1,13 +1,16 @@
 from kafka import KafkaConsumer
+from Handler.SentimentHandler import SentimentHandler
 from Config.TopicConfig import sentiment_topic_config
 from Constant.KafkaConstant import BROKER_KAFKA
 from Utils.EnvUtils import get_env_value
+
 
 
 class KafkaManager:
 
 
     def __init__(self):
+        self.sentiment_handler = SentimentHandler()
         self.sentiment_config = sentiment_topic_config
 
 
@@ -23,7 +26,7 @@ class KafkaManager:
 
             print(f'Waiting For the Message in the Sentiment Analyzer Topic')
             for message in consumer:
-                print(f"Received: {message.value.decode('utf-8')} from topic {message.topic} partition {message.partition}")
+                self.sentiment_handler.handle_sentiment_data(message)
         except Exception as error:
             print(f'Error While Subscribing the Sentiment Payload,Error {error}')
             return
