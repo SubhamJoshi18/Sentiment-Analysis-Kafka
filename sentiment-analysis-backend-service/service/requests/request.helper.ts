@@ -11,7 +11,14 @@ class RequestHelper extends BaseRequest {
     this.get = new GETMethodHelper();
   }
 
-  public async getRequest() {}
+  public async getRequest() {
+    const response = await this.get.getHTTPRequest(
+      this.apiUrl,
+      this.getDefaultQueryParams(),
+      this.getDefaultHeaders()
+    );
+    return response;
+  }
 }
 
 export default RequestHelper;
